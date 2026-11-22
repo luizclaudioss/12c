@@ -14,6 +14,10 @@ mkdir -p "$APP_DIR/Contents/MacOS" "$APP_DIR/Contents/Resources"
 cp "$ROOT_DIR/.build/release/HP12C" "$APP_DIR/Contents/MacOS/HP12C"
 chmod +x "$APP_DIR/Contents/MacOS/HP12C"
 
+echo "Gerando ícone AppIcon.icns..."
+swift "$ROOT_DIR/scripts/generate_icon.swift" "$ROOT_DIR/build/AppIcon.icns"
+cp "$ROOT_DIR/build/AppIcon.icns" "$APP_DIR/Contents/Resources/AppIcon.icns"
+
 cat > "$APP_DIR/Contents/Info.plist" <<'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -23,6 +27,8 @@ cat > "$APP_DIR/Contents/Info.plist" <<'EOF'
     <string>pt_BR</string>
     <key>CFBundleExecutable</key>
     <string>HP12C</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>CFBundleIdentifier</key>
     <string>com.luirdi.hp12c</string>
     <key>CFBundleInfoDictionaryVersion</key>
@@ -44,10 +50,18 @@ cat > "$APP_DIR/Contents/Info.plist" <<'EOF'
 EOF
 
 codesign --force -s - "$APP_DIR"
+touch "$APP_DIR"
 echo "App gerado com sucesso em: $APP_DIR"
 
 ROOT_APP_DIR="$ROOT_DIR/HP12C.app"
 rm -rf "$ROOT_APP_DIR"
 cp -R "$APP_DIR" "$ROOT_APP_DIR"
 codesign --force -s - "$ROOT_APP_DIR"
+touch "$ROOT_APP_DIR"
+
+LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
+if [ -x "$LSREGISTER" ]; then
+    "$LSREGISTER" -f "$APP_DIR"
+    "$LSREGISTER" -f "$ROOT_APP_DIR"
+fi
 echo "Cópia criada na raiz do projeto: $ROOT_APP_DIR"
