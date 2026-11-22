@@ -36,12 +36,12 @@ struct HP12CApp: App {
                     appDelegate.viewModel = viewModel
                     DispatchQueue.main.async {
                         if let window = NSApp.windows.first {
-                            window.contentAspectRatio = NSSize(width: 940, height: 552)
+                            window.contentAspectRatio = NSSize(width: 940, height: 568)
                         }
                     }
                 }
         }
-        .defaultSize(width: 940, height: 552)
+        .defaultSize(width: 940, height: 568)
         .windowResizability(.contentMinSize)
         .commands {
             CommandGroup(replacing: .pasteboard) {

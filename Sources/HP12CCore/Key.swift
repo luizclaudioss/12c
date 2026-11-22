@@ -92,9 +92,9 @@ public enum Key: Int, CaseIterable, Codable, Sendable {
         switch self {
         case .n:         return Labels(primary: "n", gold: "AMORT", blue: "12×")
         case .i:         return Labels(primary: "i", gold: "INT", blue: "12÷")
-        case .pv:        return Labels(primary: "PV", gold: "NPV", blue: "CF₀")
-        case .pmt:       return Labels(primary: "PMT", gold: "RND", blue: "CFⱼ")
-        case .fv:        return Labels(primary: "FV", gold: "IRR", blue: "Nⱼ")
+        case .pv:        return Labels(primary: "PV", gold: "NPV", blue: "CFo")
+        case .pmt:       return Labels(primary: "PMT", gold: "RND", blue: "CFj")
+        case .fv:        return Labels(primary: "FV", gold: "IRR", blue: "Nj")
         case .chs:       return Labels(primary: "CHS", gold: nil, blue: "DATE")
         case .d7:        return Labels(primary: "7", gold: nil, blue: "BEG")
         case .d8:        return Labels(primary: "8", gold: nil, blue: "END")

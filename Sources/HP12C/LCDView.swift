@@ -6,6 +6,7 @@ struct LCDView: View {
     let annunciators: Annunciators
     let blinking: Bool
     let isOn: Bool
+    var scale: CGFloat = 1.0
 
     private let lcdBg = Color(red: 0xB9 / 255.0, green: 0xC0 / 255.0, blue: 0xA8 / 255.0)
     private let segOn = Color(red: 0x1D / 255.0, green: 0x21 / 255.0, blue: 0x1B / 255.0)
@@ -18,7 +19,7 @@ struct LCDView: View {
     }
 
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 4 * scale) {
             Group {
                 if isOn && blinking {
                     TimelineView(.periodic(from: .now, by: 0.4)) { context in
@@ -29,11 +30,11 @@ struct LCDView: View {
                     lcdCanvas(showDigits: isOn)
                 }
             }
-            .frame(height: 54)
+            .frame(height: 54 * scale)
 
             // Annunciator row
             HStack(spacing: 0) {
-                Spacer().frame(width: 22)
+                Spacer().frame(width: 22 * scale)
                 annunciatorLabel("f", active: isOn && annunciators.f)
                 Spacer()
                 annunciatorLabel("g", active: isOn && annunciators.g)
@@ -45,20 +46,20 @@ struct LCDView: View {
                 annunciatorLabel("C", active: isOn && annunciators.compound)
                 Spacer()
                 annunciatorLabel("PRGM", active: isOn && annunciators.prgm)
-                Spacer().frame(width: 14)
+                Spacer().frame(width: 14 * scale)
             }
-            .frame(height: 12)
+            .frame(height: 12 * scale)
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 14 * scale)
+        .padding(.vertical, 10 * scale)
         .background(
-            RoundedRectangle(cornerRadius: 4)
+            RoundedRectangle(cornerRadius: 4 * scale)
                 .fill(lcdBg)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 4)
-                        .stroke(Color.black.opacity(0.45), lineWidth: 1.5)
+                    RoundedRectangle(cornerRadius: 4 * scale)
+                        .stroke(Color.black.opacity(0.45), lineWidth: 1.5 * scale)
                 )
-                .shadow(color: .black.opacity(0.35), radius: 2, x: 0, y: 1)
+                .shadow(color: .black.opacity(0.35), radius: 2 * scale, x: 0, y: 1 * scale)
         )
     }
 
@@ -97,7 +98,7 @@ struct LCDView: View {
 
     private func annunciatorLabel(_ text: String, active: Bool) -> some View {
         Text(text)
-            .font(.system(size: 10, weight: .bold, design: .monospaced))
+            .font(.system(size: 10.5 * scale, weight: .bold, design: .monospaced))
             .foregroundColor(segOn)
             .opacity(active ? 1.0 : 0.0)
     }

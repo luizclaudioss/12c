@@ -11,23 +11,24 @@ struct CalculatorView: View {
     private let row4Left: [Key] = [.on, .f, .g, .sto, .rcl]
     private let row4Right: [Key] = [.d0, .dot, .sigmaPlus, .add]
 
-    private let goldColor = Color(red: 0xD9 / 255.0, green: 0xA7 / 255.0, blue: 0x40 / 255.0)
-    private let blueColor = Color(red: 0x5D / 255.0, green: 0xA3 / 255.0, blue: 0xE0 / 255.0)
+    private let goldColor = Color(hex: 0xECB846)
+    private let blueColor = Color(hex: 0x5CC8FF)
 
+    private let baseWidth: CGFloat = 940
+    private let baseHeight: CGFloat = 568
     private let cellWidth: CGFloat = 76
     private let colSpacing: CGFloat = 10
-    private let keyHeight: CGFloat = 54
-    private let goldStripHeight: CGFloat = 15
+    private let keyHeight: CGFloat = 58
+    private let goldStripHeight: CGFloat = 16
     private let rowSpacing: CGFloat = 8
 
     var body: some View {
         GeometryReader { geo in
-            let scale = max(0.3, min(geo.size.width / 940.0, geo.size.height / 552.0))
-            calculatorBody
-                .scaleEffect(scale)
+            let s = max(0.3, min(geo.size.width / baseWidth, geo.size.height / baseHeight))
+            calculatorBody(scale: s)
                 .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
         }
-        .frame(minWidth: 520, idealWidth: 940, maxWidth: .infinity, minHeight: 305, idealHeight: 552, maxHeight: .infinity)
+        .frame(minWidth: 520, idealWidth: baseWidth, maxWidth: .infinity, minHeight: 314, idealHeight: baseHeight, maxHeight: .infinity)
         .background(Color(hex: 0x101010))
         .onAppear {
             viewModel.installKeyboardMonitor()
@@ -40,17 +41,17 @@ struct CalculatorView: View {
         }
     }
 
-    private var calculatorBody: some View {
+    private func calculatorBody(scale s: CGFloat) -> some View {
         VStack(spacing: 0) {
-            topAluminumBezel
-                .frame(height: 152)
+            topAluminumBezel(scale: s)
+                .frame(height: 152 * s)
 
-            goldPinLine
+            goldPinLine(scale: s)
 
-            keypadArea
-                .padding(.horizontal, 26)
-                .padding(.top, 14)
-                .padding(.bottom, 22)
+            keypadArea(scale: s)
+                .padding(.horizontal, 23 * s)
+                .padding(.top, 12 * s)
+                .padding(.bottom, 20 * s)
                 .background(
                     LinearGradient(
                         colors: [Color(hex: 0x222222), Color(hex: 0x161616)],
@@ -59,7 +60,7 @@ struct CalculatorView: View {
                     )
                 )
         }
-        .frame(width: 920)
+        .frame(width: 920 * s)
         .background(
             LinearGradient(
                 colors: [Color(hex: 0x2E2E2E), Color(hex: 0x151515)],
@@ -68,18 +69,18 @@ struct CalculatorView: View {
             )
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.white.opacity(0.08), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 10 * s)
+                .stroke(Color.white.opacity(0.08), lineWidth: 1 * s)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-        .shadow(color: .black.opacity(0.6), radius: 14, x: 0, y: 6)
-        .padding(10)
-        .frame(width: 940, height: 552)
+        .clipShape(RoundedRectangle(cornerRadius: 10 * s))
+        .shadow(color: .black.opacity(0.6), radius: 14 * s, x: 0, y: 6 * s)
+        .padding(10 * s)
+        .frame(width: baseWidth * s, height: baseHeight * s)
     }
 
     // MARK: - Top Brushed Aluminum Bezel
 
-    private var topAluminumBezel: some View {
+    private func topAluminumBezel(scale s: CGFloat) -> some View {
         ZStack {
             LinearGradient(
                 colors: [
@@ -92,10 +93,10 @@ struct CalculatorView: View {
                 endPoint: .bottomTrailing
             )
 
-            HStack(spacing: 28) {
+            HStack(spacing: 28 * s) {
                 // Black LCD bezel on the left ~56%
                 ZStack {
-                    RoundedRectangle(cornerRadius: 6)
+                    RoundedRectangle(cornerRadius: 6 * s)
                         .fill(
                             LinearGradient(
                                 colors: [Color(hex: 0x1A1A1A), Color(hex: 0x0C0C0C)],
@@ -104,63 +105,64 @@ struct CalculatorView: View {
                             )
                         )
                         .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .stroke(Color.black.opacity(0.7), lineWidth: 1)
+                            RoundedRectangle(cornerRadius: 6 * s)
+                                .stroke(Color.black.opacity(0.7), lineWidth: 1 * s)
                         )
 
                     LCDView(
                         displayText: viewModel.displayText,
                         annunciators: viewModel.annunciators,
                         blinking: viewModel.blinking,
-                        isOn: viewModel.isOn
+                        isOn: viewModel.isOn,
+                        scale: s
                     )
-                    .padding(12)
+                    .padding(12 * s)
                 }
-                .frame(width: 495, height: 112)
+                .frame(width: 495 * s, height: 112 * s)
 
                 // HP 12C Badge on the right
-                HStack(spacing: 16) {
+                HStack(spacing: 16 * s) {
                     ZStack {
                         Circle()
                             .fill(Color(hex: 0x1E2630))
-                            .frame(width: 48, height: 48)
+                            .frame(width: 48 * s, height: 48 * s)
                             .overlay(
                                 Circle()
-                                    .stroke(Color.white.opacity(0.25), lineWidth: 1)
+                                    .stroke(Color.white.opacity(0.25), lineWidth: 1 * s)
                             )
                         Text("hp")
-                            .font(.system(size: 25, weight: .bold, design: .rounded).italic())
+                            .font(.system(size: 25 * s, weight: .bold, design: .rounded).italic())
                             .foregroundColor(Color(hex: 0xE6E4DC))
-                            .offset(y: -1)
+                            .offset(y: -1 * s)
                     }
 
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: 2 * s) {
                         Text("12C")
-                            .font(.system(size: 32, weight: .heavy, design: .default))
+                            .font(.system(size: 32 * s, weight: .heavy, design: .default))
                             .foregroundColor(Color(hex: 0x232323))
                         Text("FINANCIAL")
-                            .font(.system(size: 13, weight: .bold))
-                            .tracking(1.6)
+                            .font(.system(size: 13 * s, weight: .bold))
+                            .tracking(1.6 * s)
                             .foregroundColor(Color(hex: 0x2B2B2B))
                         Text("CALCULATOR")
-                            .font(.system(size: 10.5, weight: .semibold))
-                            .tracking(1.4)
+                            .font(.system(size: 10.5 * s, weight: .semibold))
+                            .tracking(1.4 * s)
                             .foregroundColor(Color(hex: 0x3D3D3D))
                     }
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 8)
+                    .padding(.horizontal, 14 * s)
+                    .padding(.vertical, 8 * s)
                     .background(
-                        RoundedRectangle(cornerRadius: 4)
-                            .stroke(Color(hex: 0x4A473E).opacity(0.45), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 4 * s)
+                            .stroke(Color(hex: 0x4A473E).opacity(0.45), lineWidth: 1 * s)
                     )
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
             }
-            .padding(.horizontal, 32)
+            .padding(.horizontal, 32 * s)
         }
     }
 
-    private var goldPinLine: some View {
+    private func goldPinLine(scale s: CGFloat) -> some View {
         Rectangle()
             .fill(
                 LinearGradient(
@@ -169,114 +171,118 @@ struct CalculatorView: View {
                     endPoint: .trailing
                 )
             )
-            .frame(height: 2)
+            .frame(height: 2 * s)
     }
 
     // MARK: - Keypad
 
-    private var keypadArea: some View {
-        VStack(spacing: rowSpacing) {
+    private func keypadArea(scale s: CGFloat) -> some View {
+        VStack(spacing: rowSpacing * s) {
             // Row 1
-            HStack(spacing: colSpacing) {
+            HStack(spacing: colSpacing * s) {
                 ForEach(row1, id: \.rawValue) { key in
-                    keyCell(key)
+                    keyCell(key, scale: s)
                 }
             }
 
             // Row 2
-            HStack(spacing: colSpacing) {
+            HStack(spacing: colSpacing * s) {
                 ForEach(row2, id: \.rawValue) { key in
-                    keyCell(key)
+                    keyCell(key, scale: s)
                 }
             }
 
             // CLEAR bracket above SST..CLx + Rows 3 & 4 with tall ENTER
             ZStack(alignment: .topLeading) {
                 // Rows 3 and 4 grid
-                HStack(alignment: .top, spacing: colSpacing) {
+                HStack(alignment: .top, spacing: colSpacing * s) {
                     // Left 5 columns (rows 3 and 4)
-                    VStack(spacing: rowSpacing) {
-                        HStack(spacing: colSpacing) {
+                    VStack(spacing: rowSpacing * s) {
+                        HStack(spacing: colSpacing * s) {
                             ForEach(row3Left, id: \.rawValue) { key in
-                                keyCell(key)
+                                keyCell(key, scale: s)
                             }
                         }
-                        HStack(spacing: colSpacing) {
+                        HStack(spacing: colSpacing * s) {
                             ForEach(row4Left, id: \.rawValue) { key in
-                                keyCell(key)
+                                keyCell(key, scale: s)
                             }
                         }
                     }
 
                     // Column 6: Tall ENTER key spanning rows 3 and 4
-                    enterKeyCell
+                    enterKeyCell(scale: s)
 
                     // Right 4 columns (rows 3 and 4)
-                    VStack(spacing: rowSpacing) {
-                        HStack(spacing: colSpacing) {
+                    VStack(spacing: rowSpacing * s) {
+                        HStack(spacing: colSpacing * s) {
                             ForEach(row3Right, id: \.rawValue) { key in
-                                keyCell(key)
+                                keyCell(key, scale: s)
                             }
                         }
-                        HStack(spacing: colSpacing) {
+                        HStack(spacing: colSpacing * s) {
                             ForEach(row4Right, id: \.rawValue) { key in
-                                keyCell(key)
+                                keyCell(key, scale: s)
                             }
                         }
                     }
                 }
-                .padding(.top, 10) // room for CLEAR bracket
+                .padding(.top, 10 * s)
 
                 // Gold CLEAR bracket spanning cols 1..4 (SST, R↓, x≷y, CLx)
-                clearBracket
-                    .offset(x: cellWidth + colSpacing, y: -2)
+                clearBracket(scale: s)
+                    .offset(x: (cellWidth + colSpacing) * s, y: -2 * s)
             }
         }
-        .padding(12)
+        .padding(12 * s)
         .background(
-            RoundedRectangle(cornerRadius: 6)
-                .stroke(goldColor.opacity(0.45), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 6 * s)
+                .stroke(goldColor.opacity(0.45), lineWidth: 1 * s)
         )
     }
 
-    private var clearBracket: some View {
-        let spanWidth = cellWidth * 4 + colSpacing * 3
+    private func clearBracket(scale s: CGFloat) -> some View {
+        let spanWidth = (cellWidth * 4 + colSpacing * 3) * s
         return ZStack {
             Path { path in
-                let yLine: CGFloat = 7
-                path.move(to: CGPoint(x: 4, y: 12))
-                path.addLine(to: CGPoint(x: 4, y: yLine))
-                path.addLine(to: CGPoint(x: spanWidth * 0.5 - 26, y: yLine))
-                path.move(to: CGPoint(x: spanWidth * 0.5 + 26, y: yLine))
-                path.addLine(to: CGPoint(x: spanWidth - 4, y: yLine))
-                path.addLine(to: CGPoint(x: spanWidth - 4, y: 12))
+                let yLine: CGFloat = 7 * s
+                path.move(to: CGPoint(x: 4 * s, y: 12 * s))
+                path.addLine(to: CGPoint(x: 4 * s, y: yLine))
+                path.addLine(to: CGPoint(x: spanWidth * 0.5 - 26 * s, y: yLine))
+                path.move(to: CGPoint(x: spanWidth * 0.5 + 26 * s, y: yLine))
+                path.addLine(to: CGPoint(x: spanWidth - 4 * s, y: yLine))
+                path.addLine(to: CGPoint(x: spanWidth - 4 * s, y: 12 * s))
             }
-            .stroke(goldColor, lineWidth: 1.2)
+            .stroke(goldColor, lineWidth: 1.2 * s)
 
             Text("CLEAR")
-                .font(.system(size: 9.5, weight: .bold))
-                .tracking(0.8)
+                .font(.system(size: 10.5 * s, weight: .bold))
+                .tracking(0.8 * s)
                 .foregroundColor(goldColor)
-                .offset(y: -1)
+                .offset(y: -1 * s)
         }
-        .frame(width: spanWidth, height: 14)
+        .frame(width: spanWidth, height: 14 * s)
     }
 
-    private func keyCell(_ key: Key) -> some View {
-        VStack(spacing: 2) {
+    private func keyCell(_ key: Key, scale s: CGFloat) -> some View {
+        let w = cellWidth * s
+        let h = keyHeight * s
+        return VStack(spacing: 2 * s) {
             Text(key.labels.gold ?? "")
-                .font(.system(size: 10, weight: .bold))
+                .font(.system(size: 11.5 * s, weight: .bold))
                 .foregroundColor(goldColor)
-                .frame(height: goldStripHeight)
+                .frame(height: goldStripHeight * s)
                 .lineLimit(1)
-                .minimumScaleFactor(0.75)
+                .minimumScaleFactor(0.8)
 
             HPKeyButton(
                 key: key,
                 isPressed: viewModel.pressedKey == key || viewModel.mousePressedKey == key,
                 goldColor: goldColor,
                 blueColor: blueColor,
-                height: keyHeight,
+                width: w,
+                height: h,
+                scale: s,
                 onPressChanged: { down in
                     viewModel.mousePressedKey = down ? key : nil
                 },
@@ -284,25 +290,28 @@ struct CalculatorView: View {
                     viewModel.press(key)
                 }
             )
-            .frame(width: cellWidth, height: keyHeight)
+            .frame(width: w, height: h)
         }
-        .frame(width: cellWidth)
+        .frame(width: w)
     }
 
-    private var enterKeyCell: some View {
-        let tallHeight = keyHeight * 2 + goldStripHeight + rowSpacing + 2
-        return VStack(spacing: 2) {
+    private func enterKeyCell(scale s: CGFloat) -> some View {
+        let w = cellWidth * s
+        let tallHeight = (keyHeight * 2 + goldStripHeight + rowSpacing + 2) * s
+        return VStack(spacing: 2 * s) {
             Text(Key.enter.labels.gold ?? "")
-                .font(.system(size: 10, weight: .bold))
+                .font(.system(size: 11.5 * s, weight: .bold))
                 .foregroundColor(goldColor)
-                .frame(height: goldStripHeight)
+                .frame(height: goldStripHeight * s)
 
             HPKeyButton(
                 key: .enter,
                 isPressed: viewModel.pressedKey == .enter || viewModel.mousePressedKey == .enter,
                 goldColor: goldColor,
                 blueColor: blueColor,
+                width: w,
                 height: tallHeight,
+                scale: s,
                 isEnter: true,
                 onPressChanged: { down in
                     viewModel.mousePressedKey = down ? .enter : nil
@@ -311,9 +320,9 @@ struct CalculatorView: View {
                     viewModel.press(.enter)
                 }
             )
-            .frame(width: cellWidth, height: tallHeight)
+            .frame(width: w, height: tallHeight)
         }
-        .frame(width: cellWidth)
+        .frame(width: w)
     }
 }
 
@@ -322,7 +331,9 @@ private struct HPKeyButton: View {
     let isPressed: Bool
     let goldColor: Color
     let blueColor: Color
+    let width: CGFloat
     let height: CGFloat
+    let scale: CGFloat
     var isEnter: Bool = false
     let onPressChanged: (Bool) -> Void
     let action: () -> Void
@@ -330,64 +341,72 @@ private struct HPKeyButton: View {
     private var isGoldKey: Bool { key == .f }
     private var isBlueKey: Bool { key == .g }
 
+    private static let symbolBlueLabels: Set<String> = [
+        "12×", "12÷", "√x", "eˣ", "x²", "x≤y", "x=0", "x̂,r", "ŷ,r", "n!", "x̄", "x̄w", "s", "Σ−"
+    ]
+
     var body: some View {
+        let s = scale
         ZStack(alignment: .bottom) {
             // Keycap body
-            RoundedRectangle(cornerRadius: 5)
+            RoundedRectangle(cornerRadius: 5 * s)
                 .fill(keyGradient)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color.black.opacity(0.85), lineWidth: 1.2)
+                    RoundedRectangle(cornerRadius: 5 * s)
+                        .stroke(Color.black.opacity(0.85), lineWidth: 1.2 * s)
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 4)
-                        .stroke(Color.white.opacity(isGoldKey || isBlueKey ? 0.25 : 0.10), lineWidth: 0.8)
-                        .padding(1)
+                    RoundedRectangle(cornerRadius: 4 * s)
+                        .stroke(Color.white.opacity(isGoldKey || isBlueKey ? 0.25 : 0.10), lineWidth: 0.8 * s)
+                        .padding(1 * s)
                 )
-                .shadow(color: .black.opacity(0.6), radius: isPressed ? 0.5 : 2.5, x: 0, y: isPressed ? 0.5 : 2)
+                .shadow(color: .black.opacity(0.6), radius: (isPressed ? 0.5 : 2.5) * s, x: 0, y: (isPressed ? 0.5 : 2) * s)
 
             VStack(spacing: 0) {
                 // Primary white/black top face
                 ZStack {
                     if isEnter {
-                        VStack(spacing: 2) {
+                        VStack(spacing: 2 * s) {
                             ForEach(["E", "N", "T", "E", "R"], id: \.self) { letter in
                                 Text(letter)
-                                    .font(.system(size: 12, weight: .bold))
+                                    .font(.system(size: 12.5 * s, weight: .bold))
                                     .foregroundColor(.white)
                             }
                         }
                     } else {
                         Text(key.labels.primary)
-                            .font(.system(size: primaryFontSize, weight: .semibold))
+                            .font(.system(size: primaryFontSize * s, weight: .semibold))
                             .foregroundColor((isGoldKey || isBlueKey) ? Color(hex: 0x151515) : .white)
-                            .minimumScaleFactor(0.7)
+                            .minimumScaleFactor(0.75)
                             .lineLimit(1)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(.horizontal, 4)
+                .padding(.horizontal, 4 * s)
 
                 // Lower front blue-label bevel strip
                 if let blueLabel = key.labels.blue {
+                    let isSymbol = Self.symbolBlueLabels.contains(blueLabel)
+                    let blueFontSize: CGFloat = (isSymbol ? 13.5 : 12.5) * s
                     ZStack {
                         Rectangle()
-                            .fill(Color.black.opacity(0.32))
+                            .fill(Color.black.opacity(0.45))
                         Text(blueLabel)
-                            .font(.system(size: 10, weight: .bold))
+                            .font(.system(size: blueFontSize, weight: .bold))
                             .foregroundColor(blueColor)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.75)
+                            .minimumScaleFactor(0.85)
+                            .padding(.horizontal, 3 * s)
                     }
-                    .frame(height: 16)
+                    .frame(height: 20 * s)
                 } else {
-                    Spacer().frame(height: 4)
+                    Spacer().frame(height: 4 * s)
                 }
             }
-            .clipShape(RoundedRectangle(cornerRadius: 5))
+            .clipShape(RoundedRectangle(cornerRadius: 5 * s))
 
             if isPressed {
-                RoundedRectangle(cornerRadius: 5)
+                RoundedRectangle(cornerRadius: 5 * s)
                     .fill(Color.black.opacity(0.18))
             }
         }
@@ -403,8 +422,9 @@ private struct HPKeyButton: View {
                 }
                 .onEnded { value in
                     onPressChanged(false)
-                    if value.location.x >= -8 && value.location.x <= 84 &&
-                       value.location.y >= -8 && value.location.y <= height + 8 {
+                    let pad = 8 * s
+                    if value.location.x >= -pad && value.location.x <= width + pad &&
+                       value.location.y >= -pad && value.location.y <= height + pad {
                         action()
                     }
                 }
@@ -413,28 +433,28 @@ private struct HPKeyButton: View {
 
     private var primaryFontSize: CGFloat {
         if key.digitValue != nil || key == .dot {
-            return 18
-        }
-        if key == .add || key == .sub || key == .mul || key == .div {
             return 19
         }
-        if isGoldKey || isBlueKey {
-            return 17
+        if key == .add || key == .sub || key == .mul || key == .div {
+            return 20
         }
-        return 14
+        if isGoldKey || isBlueKey {
+            return 18
+        }
+        return 14.5
     }
 
     private var keyGradient: LinearGradient {
         if isGoldKey {
             return LinearGradient(
-                colors: [Color(hex: 0xE6AD36), Color(hex: 0xC68C1C)],
+                colors: [Color(hex: 0xECB23B), Color(hex: 0xC68C1C)],
                 startPoint: .top,
                 endPoint: .bottom
             )
         }
         if isBlueKey {
             return LinearGradient(
-                colors: [Color(hex: 0x58A0E0), Color(hex: 0x3576B5)],
+                colors: [Color(hex: 0x5CA4E4), Color(hex: 0x3576B5)],
                 startPoint: .top,
                 endPoint: .bottom
             )
