@@ -152,7 +152,7 @@ func renderIcon(size px: Int) -> CGImage {
     ctx.setLineWidth(3)
     ctx.strokePath()
 
-    // LCD text "12,345.67"
+    // LCD text "12.345,67"
     let lcdParagraph = NSMutableParagraphStyle()
     lcdParagraph.alignment = .left
     let lcdAttrs: [NSAttributedString.Key: Any] = [
@@ -160,7 +160,7 @@ func renderIcon(size px: Int) -> CGImage {
         .foregroundColor: color(0x1D211B),
         .paragraphStyle: lcdParagraph
     ]
-    let lcdStr = NSAttributedString(string: "12,345.67", attributes: lcdAttrs)
+    let lcdStr = NSAttributedString(string: "12.345,67", attributes: lcdAttrs)
     let lcdBounds = lcdStr.boundingRect(with: CGSize(width: 404, height: 120), options: [.usesLineFragmentOrigin])
     lcdStr.draw(in: CGRect(
         x: 186,

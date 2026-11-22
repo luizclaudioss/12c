@@ -8,10 +8,10 @@ struct Step3Tests {
         let c1 = HP12C()
         c1.pressSequence("5.142004 ENTER 120 g DATE")
         #expect(approxEqual(c1.x, 9.112004, tol: 1e-7))
-        #expect(c1.displayText == "9.112004  6")
+        #expect(c1.displayText == "9,112004  6")
         // Next key clears date display format
         c1.press(.clx)
-        #expect(c1.displayText == "0.00")
+        #expect(c1.displayText == "0,00")
 
         let c2 = HP12C()
         c2.pressSequence("1.012020 ENTER 3.012020 g ΔDYS")
@@ -32,7 +32,7 @@ struct Step3Tests {
         c5.pressSequence("g D.MY 14.052004 ENTER 120 g DATE")
         #expect(c5.annunciators.dmy == true)
         #expect(approxEqual(c5.x, 11.092004, tol: 1e-7))
-        #expect(c5.displayText == "11.092004 6")
+        #expect(c5.displayText == "11,092004 6")
     }
 
     @Test func statisticsAndRegression() {

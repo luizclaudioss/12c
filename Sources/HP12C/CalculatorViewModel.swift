@@ -234,7 +234,8 @@ final class CalculatorViewModel: ObservableObject {
 
     func copyXString() -> String {
         let v = engine.x == 0 ? 0.0 : engine.x
-        return String(format: "%.10g", v)
+        let s = String(format: "%.10g", v)
+        return engine.state.european ? s.replacingOccurrences(of: ".", with: ",") : s
     }
 
     func pasteFromString(_ raw: String) {

@@ -77,7 +77,7 @@ public struct HP12CState: Codable, Equatable, Sendable {
     public var begin: Bool = false
     public var dmy: Bool = false
     public var compound: Bool = false
-    public var european: Bool = false
+    public var european: Bool = true
     public var displayMode: DisplayMode = .fix(2)
 
     public var program: [Instruction] = []

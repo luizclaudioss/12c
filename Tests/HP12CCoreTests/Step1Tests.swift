@@ -76,44 +76,44 @@ struct Step1Tests {
     @Test func displayFormatting() {
         let calc = HP12C()
         calc.pressSequence("1234.5 ENTER")
-        #expect(calc.displayText == "1,234.50")
+        #expect(calc.displayText == "1.234,50")
 
         calc.pressSequence("f 4")
-        #expect(calc.displayText == "1,234.5000")
+        #expect(calc.displayText == "1.234,5000")
 
         let c2 = HP12C()
         c2.pressSequence("1 EEX 12 ENTER")
-        #expect(c2.displayText == "1.000000 12")
+        #expect(c2.displayText == "1,000000 12")
 
         let c3 = HP12C()
         c3.pressSequence("0.0001 ENTER")
-        #expect(c3.displayText == "1.000000-04")
+        #expect(c3.displayText == "1,000000-04")
 
         let c4 = HP12C()
         c4.pressSequence("0.5 CHS ENTER")
-        #expect(c4.displayText == "-0.50")
+        #expect(c4.displayText == "-0,50")
 
         let c5 = HP12C()
         c5.pressSequence("1234.5 ENTER")
         c5.toggleSeparator()
-        #expect(c5.displayText == "1.234,50")
+        #expect(c5.displayText == "1,234.50")
 
         let c6 = HP12C()
         c6.pressSequence("123456 ENTER f .")
-        #expect(c6.displayText == "1.234560 05")
+        #expect(c6.displayText == "1,234560 05")
 
         let c7 = HP12C()
         c7.pressSequence("1234")
-        #expect(c7.displayText == "1,234.")
+        #expect(c7.displayText == "1.234,")
 
         let c8 = HP12C()
         c8.pressSequence("0.05")
-        #expect(c8.displayText == "0.05")
+        #expect(c8.displayText == "0,05")
 
         let c9 = HP12C()
         c9.pressSequence("1 EEX 99 ENTER 100 ×")
         #expect(c9.blinking == true)
-        #expect(c9.displayText == "9.999999 99")
+        #expect(c9.displayText == "9,999999 99")
         #expect(c9.x == 9.999999999e99)
         // Next key clears blinking and executes normally
         c9.pressSequence("CLx")
@@ -131,7 +131,7 @@ struct Step1Tests {
         #expect(calc.displayText == "Error 0")
         // Next key only clears error (is not executed)
         calc.pressSequence("5")
-        #expect(calc.displayText == "0.00")
+        #expect(calc.displayText == "0,00")
         #expect(calc.x == 0)
 
         let c2 = HP12C()
@@ -179,17 +179,17 @@ struct Step1Tests {
         calc.pressSequence("1234.5 f CLEAR PREFIX")
         #expect(calc.displayText == "1234500000")
 
-        // ON + . toggles European separator
+        // ON + . toggles European/US separator
         let p = HP12C()
         p.pressSequence("1234.5 ENTER ON . ON")
         #expect(p.isOn)
-        #expect(p.displayText == "1.234,50")
+        #expect(p.displayText == "1,234.50")
 
-        // ON + - resets continuous memory with Pr Error
+        // ON + - resets continuous memory with Pr Error (back to default Brazilian/European format)
         p.pressSequence("ON − ON")
         #expect(p.displayText == "Pr Error")
         p.press(.clx)
-        #expect(p.displayText == "0.00")
-        #expect(!p.state.european)
+        #expect(p.displayText == "0,00")
+        #expect(p.state.european)
     }
 }

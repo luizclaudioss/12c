@@ -117,7 +117,7 @@ struct Step4And5Tests {
         #expect(c4.step() == .continue)
         #expect(c4.step() == .continue)
         #expect(c4.step() == .pause)
-        #expect(c4.displayText == "42.00")
+        #expect(c4.displayText == "42,00")
         #expect(c4.step() == .continue)
         #expect(c4.step() == .stopped)
         #expect(approxEqual(c4.x, 43))
@@ -142,7 +142,6 @@ struct Step4And5Tests {
         calc.pressSequence("42 STO . 3")
         calc.pressSequence("g BEG g D.MY STO EEX f 4")
         calc.pressSequence("f P/R f CLEAR PRGM 2 × g GTO 00 f P/R")
-        calc.toggleSeparator()
 
         let data = try JSONEncoder().encode(calc.state)
         let decoded = try JSONDecoder().decode(HP12CState.self, from: data)

@@ -8,7 +8,7 @@ struct Step2Tests {
         let calc = HP12C()
         calc.pressSequence("360 n 0.5 i 200000 PV 0 FV PMT")
         #expect(approxEqual(calc.x, -1199.101050))
-        #expect(calc.displayText == "-1,199.10")
+        #expect(calc.displayText == "-1.199,10")
 
         let c2 = HP12C()
         c2.pressSequence("10 n 8 i 1000 CHS PV 0 PMT FV")
