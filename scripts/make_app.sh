@@ -45,3 +45,9 @@ EOF
 
 codesign --force -s - "$APP_DIR"
 echo "App gerado com sucesso em: $APP_DIR"
+
+ROOT_APP_DIR="$ROOT_DIR/HP12C.app"
+rm -rf "$ROOT_APP_DIR"
+cp -R "$APP_DIR" "$ROOT_APP_DIR"
+codesign --force -s - "$ROOT_APP_DIR"
+echo "Cópia criada na raiz do projeto: $ROOT_APP_DIR"
