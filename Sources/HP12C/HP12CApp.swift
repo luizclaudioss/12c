@@ -34,9 +34,15 @@ struct HP12CApp: App {
             CalculatorView(viewModel: viewModel)
                 .onAppear {
                     appDelegate.viewModel = viewModel
+                    DispatchQueue.main.async {
+                        if let window = NSApp.windows.first {
+                            window.contentAspectRatio = NSSize(width: 940, height: 552)
+                        }
+                    }
                 }
         }
-        .windowResizability(.contentSize)
+        .defaultSize(width: 940, height: 552)
+        .windowResizability(.contentMinSize)
         .commands {
             CommandGroup(replacing: .pasteboard) {
                 Button("Copiar X") {

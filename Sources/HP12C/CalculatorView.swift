@@ -21,6 +21,26 @@ struct CalculatorView: View {
     private let rowSpacing: CGFloat = 8
 
     var body: some View {
+        GeometryReader { geo in
+            let scale = max(0.3, min(geo.size.width / 940.0, geo.size.height / 552.0))
+            calculatorBody
+                .scaleEffect(scale)
+                .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
+        }
+        .frame(minWidth: 520, idealWidth: 940, maxWidth: .infinity, minHeight: 305, idealHeight: 552, maxHeight: .infinity)
+        .background(Color(hex: 0x101010))
+        .onAppear {
+            viewModel.installKeyboardMonitor()
+        }
+        .onDisappear {
+            viewModel.removeKeyboardMonitor()
+        }
+        .sheet(isPresented: $viewModel.showingShortcuts) {
+            ShortcutsSheet()
+        }
+    }
+
+    private var calculatorBody: some View {
         VStack(spacing: 0) {
             topAluminumBezel
                 .frame(height: 152)
@@ -54,16 +74,7 @@ struct CalculatorView: View {
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .shadow(color: .black.opacity(0.6), radius: 14, x: 0, y: 6)
         .padding(10)
-        .background(Color(hex: 0x101010))
-        .onAppear {
-            viewModel.installKeyboardMonitor()
-        }
-        .onDisappear {
-            viewModel.removeKeyboardMonitor()
-        }
-        .sheet(isPresented: $viewModel.showingShortcuts) {
-            ShortcutsSheet()
-        }
+        .frame(width: 940, height: 552)
     }
 
     // MARK: - Top Brushed Aluminum Bezel
