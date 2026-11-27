@@ -11,15 +11,15 @@ struct CalculatorView: View {
     private let row4Left: [Key] = [.on, .f, .g, .sto, .rcl]
     private let row4Right: [Key] = [.d0, .dot, .sigmaPlus, .add]
 
-    private let goldColor = Color(hex: 0xECB846)
-    private let blueColor = Color(hex: 0x5CC8FF)
+    private let goldColor = Color(hex: 0xFFAA1D)
+    private let blueColor = Color(hex: 0x38D4FF)
 
     private let baseWidth: CGFloat = 940
-    private let baseHeight: CGFloat = 568
+    private let baseHeight: CGFloat = 620
     private let cellWidth: CGFloat = 76
     private let colSpacing: CGFloat = 10
-    private let keyHeight: CGFloat = 58
-    private let goldStripHeight: CGFloat = 16
+    private let keyHeight: CGFloat = 66
+    private let goldStripHeight: CGFloat = 20
     private let rowSpacing: CGFloat = 8
 
     var body: some View {
@@ -28,7 +28,7 @@ struct CalculatorView: View {
             calculatorBody(scale: s)
                 .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
         }
-        .frame(minWidth: 520, idealWidth: baseWidth, maxWidth: .infinity, minHeight: 314, idealHeight: baseHeight, maxHeight: .infinity)
+        .frame(minWidth: 520, idealWidth: baseWidth, maxWidth: .infinity, minHeight: 343, idealHeight: baseHeight, maxHeight: .infinity)
         .background(Color(hex: 0x101010))
         .onAppear {
             viewModel.installKeyboardMonitor()
@@ -44,14 +44,14 @@ struct CalculatorView: View {
     private func calculatorBody(scale s: CGFloat) -> some View {
         VStack(spacing: 0) {
             topAluminumBezel(scale: s)
-                .frame(height: 152 * s)
+                .frame(height: 154 * s)
 
             goldPinLine(scale: s)
 
             keypadArea(scale: s)
                 .padding(.horizontal, 23 * s)
                 .padding(.top, 12 * s)
-                .padding(.bottom, 20 * s)
+                .padding(.bottom, 18 * s)
                 .background(
                     LinearGradient(
                         colors: [Color(hex: 0x222222), Color(hex: 0x161616)],
@@ -116,9 +116,9 @@ struct CalculatorView: View {
                         isOn: viewModel.isOn,
                         scale: s
                     )
-                    .padding(12 * s)
+                    .padding(8 * s)
                 }
-                .frame(width: 495 * s, height: 112 * s)
+                .frame(width: 510 * s, height: 116 * s)
 
                 // HP 12C Badge on the right
                 HStack(spacing: 16 * s) {
@@ -166,7 +166,7 @@ struct CalculatorView: View {
         Rectangle()
             .fill(
                 LinearGradient(
-                    colors: [goldColor.opacity(0.65), goldColor, goldColor.opacity(0.65)],
+                    colors: [goldColor.opacity(0.75), goldColor, goldColor.opacity(0.75)],
                     startPoint: .leading,
                     endPoint: .trailing
                 )
@@ -227,7 +227,7 @@ struct CalculatorView: View {
                         }
                     }
                 }
-                .padding(.top, 10 * s)
+                .padding(.top, 14 * s)
 
                 // Gold CLEAR bracket spanning cols 1..4 (SST, R↓, x≷y, CLx)
                 clearBracket(scale: s)
@@ -237,7 +237,7 @@ struct CalculatorView: View {
         .padding(12 * s)
         .background(
             RoundedRectangle(cornerRadius: 6 * s)
-                .stroke(goldColor.opacity(0.45), lineWidth: 1 * s)
+                .stroke(goldColor.opacity(0.65), lineWidth: 1.2 * s)
         )
     }
 
@@ -245,23 +245,23 @@ struct CalculatorView: View {
         let spanWidth = (cellWidth * 4 + colSpacing * 3) * s
         return ZStack {
             Path { path in
-                let yLine: CGFloat = 7 * s
-                path.move(to: CGPoint(x: 4 * s, y: 12 * s))
+                let yLine: CGFloat = 9 * s
+                path.move(to: CGPoint(x: 4 * s, y: 15 * s))
                 path.addLine(to: CGPoint(x: 4 * s, y: yLine))
-                path.addLine(to: CGPoint(x: spanWidth * 0.5 - 26 * s, y: yLine))
-                path.move(to: CGPoint(x: spanWidth * 0.5 + 26 * s, y: yLine))
+                path.addLine(to: CGPoint(x: spanWidth * 0.5 - 34 * s, y: yLine))
+                path.move(to: CGPoint(x: spanWidth * 0.5 + 34 * s, y: yLine))
                 path.addLine(to: CGPoint(x: spanWidth - 4 * s, y: yLine))
-                path.addLine(to: CGPoint(x: spanWidth - 4 * s, y: 12 * s))
+                path.addLine(to: CGPoint(x: spanWidth - 4 * s, y: 15 * s))
             }
-            .stroke(goldColor, lineWidth: 1.2 * s)
+            .stroke(goldColor, lineWidth: 1.8 * s)
 
             Text("CLEAR")
-                .font(.system(size: 10.5 * s, weight: .bold))
+                .font(.system(size: 13.5 * s, weight: .heavy))
                 .tracking(0.8 * s)
                 .foregroundColor(goldColor)
                 .offset(y: -1 * s)
         }
-        .frame(width: spanWidth, height: 14 * s)
+        .frame(width: spanWidth, height: 18 * s)
     }
 
     private func keyCell(_ key: Key, scale s: CGFloat) -> some View {
@@ -269,11 +269,11 @@ struct CalculatorView: View {
         let h = keyHeight * s
         return VStack(spacing: 2 * s) {
             Text(key.labels.gold ?? "")
-                .font(.system(size: 11.5 * s, weight: .bold))
+                .font(.system(size: 15.5 * s, weight: .heavy))
                 .foregroundColor(goldColor)
                 .frame(height: goldStripHeight * s)
                 .lineLimit(1)
-                .minimumScaleFactor(0.8)
+                .minimumScaleFactor(0.75)
 
             HPKeyButton(
                 key: key,
@@ -300,9 +300,11 @@ struct CalculatorView: View {
         let tallHeight = (keyHeight * 2 + goldStripHeight + rowSpacing + 2) * s
         return VStack(spacing: 2 * s) {
             Text(Key.enter.labels.gold ?? "")
-                .font(.system(size: 11.5 * s, weight: .bold))
+                .font(.system(size: 15.5 * s, weight: .heavy))
                 .foregroundColor(goldColor)
                 .frame(height: goldStripHeight * s)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
 
             HPKeyButton(
                 key: .enter,
@@ -369,13 +371,13 @@ private struct HPKeyButton: View {
                         VStack(spacing: 2 * s) {
                             ForEach(["E", "N", "T", "E", "R"], id: \.self) { letter in
                                 Text(letter)
-                                    .font(.system(size: 12.5 * s, weight: .bold))
+                                    .font(.system(size: 15.5 * s, weight: .bold))
                                     .foregroundColor(.white)
                             }
                         }
                     } else {
                         Text(key.labels.primary)
-                            .font(.system(size: primaryFontSize * s, weight: .semibold))
+                            .font(.system(size: primaryFontSize * s, weight: primaryFontWeight))
                             .foregroundColor((isGoldKey || isBlueKey) ? Color(hex: 0x151515) : .white)
                             .minimumScaleFactor(0.75)
                             .lineLimit(1)
@@ -387,18 +389,18 @@ private struct HPKeyButton: View {
                 // Lower front blue-label bevel strip
                 if let blueLabel = key.labels.blue {
                     let isSymbol = Self.symbolBlueLabels.contains(blueLabel)
-                    let blueFontSize: CGFloat = (isSymbol ? 13.5 : 12.5) * s
+                    let blueFontSize: CGFloat = (isSymbol ? 17.5 : 16.0) * s
                     ZStack {
                         Rectangle()
-                            .fill(Color.black.opacity(0.45))
+                            .fill(Color.black.opacity(0.62))
                         Text(blueLabel)
-                            .font(.system(size: blueFontSize, weight: .bold))
+                            .font(.system(size: blueFontSize, weight: .heavy))
                             .foregroundColor(blueColor)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.85)
-                            .padding(.horizontal, 3 * s)
+                            .minimumScaleFactor(0.78)
+                            .padding(.horizontal, 2 * s)
                     }
-                    .frame(height: 20 * s)
+                    .frame(height: 25 * s)
                 } else {
                     Spacer().frame(height: 4 * s)
                 }
@@ -433,28 +435,32 @@ private struct HPKeyButton: View {
 
     private var primaryFontSize: CGFloat {
         if key.digitValue != nil || key == .dot {
-            return 19
+            return 25
         }
         if key == .add || key == .sub || key == .mul || key == .div {
-            return 20
+            return 27
         }
         if isGoldKey || isBlueKey {
-            return 18
+            return 24
         }
-        return 14.5
+        return 18
+    }
+
+    private var primaryFontWeight: Font.Weight {
+        (isGoldKey || isBlueKey) ? .heavy : .bold
     }
 
     private var keyGradient: LinearGradient {
         if isGoldKey {
             return LinearGradient(
-                colors: [Color(hex: 0xECB23B), Color(hex: 0xC68C1C)],
+                colors: [Color(hex: 0xFFB324), Color(hex: 0xE08400)],
                 startPoint: .top,
                 endPoint: .bottom
             )
         }
         if isBlueKey {
             return LinearGradient(
-                colors: [Color(hex: 0x5CA4E4), Color(hex: 0x3576B5)],
+                colors: [Color(hex: 0x38C0FF), Color(hex: 0x167FD1)],
                 startPoint: .top,
                 endPoint: .bottom
             )

@@ -30,7 +30,7 @@ struct LCDView: View {
                     lcdCanvas(showDigits: isOn)
                 }
             }
-            .frame(height: 54 * scale)
+            .frame(height: 68 * scale)
 
             // Annunciator row
             HStack(spacing: 0) {
@@ -48,10 +48,10 @@ struct LCDView: View {
                 annunciatorLabel("PRGM", active: isOn && annunciators.prgm)
                 Spacer().frame(width: 14 * scale)
             }
-            .frame(height: 12 * scale)
+            .frame(height: 14 * scale)
         }
         .padding(.horizontal, 14 * scale)
-        .padding(.vertical, 10 * scale)
+        .padding(.vertical, 6 * scale)
         .background(
             RoundedRectangle(cornerRadius: 4 * scale)
                 .fill(lcdBg)
@@ -98,7 +98,7 @@ struct LCDView: View {
 
     private func annunciatorLabel(_ text: String, active: Bool) -> some View {
         Text(text)
-            .font(.system(size: 10.5 * scale, weight: .bold, design: .monospaced))
+            .font(.system(size: 11.5 * scale, weight: .bold, design: .monospaced))
             .foregroundColor(segOn)
             .opacity(active ? 1.0 : 0.0)
     }
@@ -192,7 +192,7 @@ struct LCDView: View {
     private func drawDigitCell(context: inout GraphicsContext, rect: CGRect, cell: CellData, showGhost: Bool) {
         let w = rect.width
         let h = rect.height
-        let t = max(2.4, w * 0.13)
+        let t = max(2.6, w * 0.145)
         let leftPad = w * 0.12
         let rightPad = w * 0.25 // reserve space for dot/comma
         let topPad = h * 0.08
