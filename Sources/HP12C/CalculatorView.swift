@@ -14,8 +14,8 @@ struct CalculatorView: View {
     private let goldColor = Color(hex: 0xFFAA1D)
     private let blueColor = Color(hex: 0x38D4FF)
 
-    private let baseWidth: CGFloat = 940
-    private let baseHeight: CGFloat = 620
+    private let baseWidth: CGFloat = 920
+    private let baseHeight: CGFloat = 600
     private let cellWidth: CGFloat = 76
     private let colSpacing: CGFloat = 10
     private let keyHeight: CGFloat = 66
@@ -28,8 +28,8 @@ struct CalculatorView: View {
             calculatorBody(scale: s)
                 .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
         }
-        .frame(minWidth: 520, idealWidth: baseWidth, maxWidth: .infinity, minHeight: 343, idealHeight: baseHeight, maxHeight: .infinity)
-        .background(Color(hex: 0x101010))
+        .frame(minWidth: 520, idealWidth: baseWidth, maxWidth: .infinity, minHeight: 339, idealHeight: baseHeight, maxHeight: .infinity)
+        .background(Color(hex: 0x161616))
         .onAppear {
             viewModel.installKeyboardMonitor()
         }
@@ -60,7 +60,7 @@ struct CalculatorView: View {
                     )
                 )
         }
-        .frame(width: 920 * s)
+        .frame(width: baseWidth * s, height: baseHeight * s)
         .background(
             LinearGradient(
                 colors: [Color(hex: 0x2E2E2E), Color(hex: 0x151515)],
@@ -68,14 +68,6 @@ struct CalculatorView: View {
                 endPoint: .bottom
             )
         )
-        .overlay(
-            RoundedRectangle(cornerRadius: 10 * s)
-                .stroke(Color.white.opacity(0.08), lineWidth: 1 * s)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 10 * s))
-        .shadow(color: .black.opacity(0.6), radius: 14 * s, x: 0, y: 6 * s)
-        .padding(10 * s)
-        .frame(width: baseWidth * s, height: baseHeight * s)
     }
 
     // MARK: - Top Brushed Aluminum Bezel
