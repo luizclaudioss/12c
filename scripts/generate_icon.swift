@@ -169,39 +169,25 @@ func renderIcon(size px: Int) -> CGImage {
         height: lcdBounds.height + 10
     ))
 
-    // HP circular logo + "12C" badge on the right of top band
-    let hpCircleRect = CGRect(x: 646, y: 744, width: 92, height: 92)
-    ctx.setFillColor(color(0x1E2630).cgColor)
-    ctx.fillEllipse(in: hpCircleRect)
-    ctx.setStrokeColor(NSColor.white.withAlphaComponent(0.3).cgColor)
-    ctx.setLineWidth(2.5)
-    ctx.strokeEllipse(in: hpCircleRect)
-
-    let hpStyle = NSMutableParagraphStyle()
-    hpStyle.alignment = .center
-    let hpFont = NSFont(name: "Helvetica-BoldOblique", size: 50) ?? NSFont.boldSystemFont(ofSize: 50)
-    let hpAttrs: [NSAttributedString.Key: Any] = [
-        .font: hpFont,
-        .foregroundColor: color(0xEAE8DF),
-        .paragraphStyle: hpStyle
-    ]
-    let hpStr = NSAttributedString(string: "hp", attributes: hpAttrs)
-    hpStr.draw(in: CGRect(x: 646, y: 758, width: 92, height: 64))
-
+    // "12C" badge centered on the right of top band
+    let badgeStyle = NSMutableParagraphStyle()
+    badgeStyle.alignment = .center
     let badgeAttrs: [NSAttributedString.Key: Any] = [
-        .font: NSFont.systemFont(ofSize: 64, weight: .heavy),
-        .foregroundColor: color(0x202020)
+        .font: NSFont.systemFont(ofSize: 70, weight: .heavy),
+        .foregroundColor: color(0x202020),
+        .paragraphStyle: badgeStyle
     ]
-    let badgeStr = NSAttributedString(string: "12C", attributes: badgeAttrs)
-    badgeStr.draw(in: CGRect(x: 750, y: 748, width: 150, height: 80))
+    NSAttributedString(string: "12C", attributes: badgeAttrs)
+        .draw(in: CGRect(x: 636, y: 748, width: 256, height: 86))
 
     let finAttrs: [NSAttributedString.Key: Any] = [
-        .font: NSFont.systemFont(ofSize: 19, weight: .bold),
+        .font: NSFont.systemFont(ofSize: 21, weight: .bold),
         .foregroundColor: color(0x323232),
-        .kern: 1.5
+        .kern: 1.5,
+        .paragraphStyle: badgeStyle
     ]
     NSAttributedString(string: "FINANCIAL", attributes: finAttrs)
-        .draw(in: CGRect(x: 648, y: 696, width: 220, height: 28))
+        .draw(in: CGRect(x: 636, y: 706, width: 256, height: 30))
 
     // Keypad outer gold frame
     let keypadFrameRect = CGRect(x: 146, y: 148, width: 732, height: 448)

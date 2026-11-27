@@ -112,42 +112,26 @@ struct CalculatorView: View {
                 }
                 .frame(width: 510 * s, height: 116 * s)
 
-                // HP 12C Badge on the right
-                HStack(spacing: 16 * s) {
-                    ZStack {
-                        Circle()
-                            .fill(Color(hex: 0x1E2630))
-                            .frame(width: 48 * s, height: 48 * s)
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.white.opacity(0.25), lineWidth: 1 * s)
-                            )
-                        Text("hp")
-                            .font(.system(size: 25 * s, weight: .bold, design: .rounded).italic())
-                            .foregroundColor(Color(hex: 0xE6E4DC))
-                            .offset(y: -1 * s)
-                    }
-
-                    VStack(alignment: .leading, spacing: 2 * s) {
-                        Text("12C")
-                            .font(.system(size: 32 * s, weight: .heavy, design: .default))
-                            .foregroundColor(Color(hex: 0x232323))
-                        Text("FINANCIAL")
-                            .font(.system(size: 13 * s, weight: .bold))
-                            .tracking(1.6 * s)
-                            .foregroundColor(Color(hex: 0x2B2B2B))
-                        Text("CALCULATOR")
-                            .font(.system(size: 10.5 * s, weight: .semibold))
-                            .tracking(1.4 * s)
-                            .foregroundColor(Color(hex: 0x3D3D3D))
-                    }
-                    .padding(.horizontal, 14 * s)
-                    .padding(.vertical, 8 * s)
-                    .background(
-                        RoundedRectangle(cornerRadius: 4 * s)
-                            .stroke(Color(hex: 0x4A473E).opacity(0.45), lineWidth: 1 * s)
-                    )
+                // 12C Badge on the right
+                VStack(alignment: .leading, spacing: 2 * s) {
+                    Text("12C")
+                        .font(.system(size: 32 * s, weight: .heavy, design: .default))
+                        .foregroundColor(Color(hex: 0x232323))
+                    Text("FINANCIAL")
+                        .font(.system(size: 13 * s, weight: .bold))
+                        .tracking(1.6 * s)
+                        .foregroundColor(Color(hex: 0x2B2B2B))
+                    Text("CALCULATOR")
+                        .font(.system(size: 10.5 * s, weight: .semibold))
+                        .tracking(1.4 * s)
+                        .foregroundColor(Color(hex: 0x3D3D3D))
                 }
+                .padding(.horizontal, 14 * s)
+                .padding(.vertical, 8 * s)
+                .background(
+                    RoundedRectangle(cornerRadius: 4 * s)
+                        .stroke(Color(hex: 0x4A473E).opacity(0.45), lineWidth: 1 * s)
+                )
                 .frame(maxWidth: .infinity, alignment: .center)
             }
             .padding(.horizontal, 32 * s)
